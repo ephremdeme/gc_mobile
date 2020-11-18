@@ -40,7 +40,7 @@ public class Activity2 extends AppCompatActivity {
     private ArFragment arFragment;
 //    private String assetModel = "https://poly.googleusercontent.com/downloads/c/fp/1602302627357152/0BnDT3T1wTE/85QOHCZOvov/Mesh_Beagle.gltf";
 //    private String assetModel = "https://www.mediafire.com/file/ht0s1x3akcaobct/chair.glb";
-    private String assetModel = "http://192.168.137.125:80/chair.glb";
+    private String assetModel = "http://10.42.0.74/chair.glb";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

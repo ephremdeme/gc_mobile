@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_interaction/components/custom_suffix_icon.dart';
 import 'package:flutter_native_interaction/components/default_button.dart';
 import 'package:flutter_native_interaction/components/form_error.dart';
-// import 'package:flutter_native_interaction/screens/complete_profile/complete_profile_screen.dart';
+import 'package:flutter_native_interaction/screens/complete_profile/complete_profile_screen.dart';
 
 import '../../../constants.dart';
 import '../../../size_config.dart';
-
 
 class SignUpForm extends StatefulWidget {
   @override
@@ -18,7 +17,7 @@ class _SignUpFormState extends State<SignUpForm> {
   String email;
   String password;
   // ignore: non_constant_identifier_names
-  String conform_password;
+  String confirm_password;
   bool remember = false;
   final List<String> errors = [];
 
@@ -46,7 +45,7 @@ class _SignUpFormState extends State<SignUpForm> {
           SizedBox(height: getProportionateScreenHeight(30)),
           buildPasswordFormField(),
           SizedBox(height: getProportionateScreenHeight(30)),
-          buildConformPassFormField(),
+          buildConfirmPassFormField(),
           FormError(errors: errors),
           SizedBox(height: getProportionateScreenHeight(40)),
           DefaultButton(
@@ -54,7 +53,7 @@ class _SignUpFormState extends State<SignUpForm> {
             press: () {
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
-                // Navigator.pushNamed(context, CompleteProfileScreen.routeName);
+                Navigator.pushNamed(context, CompleteProfileScreen.routeName);
               }
             },
           ),
@@ -63,17 +62,17 @@ class _SignUpFormState extends State<SignUpForm> {
     );
   }
 
-  TextFormField buildConformPassFormField() {
+  TextFormField buildConfirmPassFormField() {
     return TextFormField(
       obscureText: true,
-      onSaved: (newValue) => conform_password = newValue,
+      onSaved: (newValue) => confirm_password = newValue,
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kPassNullError);
-        } else if (value.isNotEmpty && password == conform_password) {
+        } else if (value.isNotEmpty && password == confirm_password) {
           removeError(error: kMatchPassError);
         }
-        conform_password = value;
+        confirm_password = value;
       },
       validator: (value) {
         if (value.isEmpty) {

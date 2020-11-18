@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_interaction/routes.dart';
+import 'package:flutter_native_interaction/screens/ar_view.dart';
 import 'package:flutter_native_interaction/screens/splash/splash_screen.dart';
 import 'package:flutter_native_interaction/theme.dart';
 
@@ -15,7 +16,8 @@ class MyApp extends StatelessWidget {
       title: 'AR assisted E-commerce',
       theme: theme(),
       // home: SplashScreen(),
-      initialRoute: SplashScreen.routeName,
+      // initialRoute: SplashScreen.routeName,
+      initialRoute: ArPage.routeName,
       routes: routes,
     );
   }

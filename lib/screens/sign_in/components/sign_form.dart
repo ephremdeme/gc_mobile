@@ -3,6 +3,7 @@ import 'package:flutter_native_interaction/components/custom_suffix_icon.dart';
 import 'package:flutter_native_interaction/components/form_error.dart';
 import 'package:flutter_native_interaction/screens/forgot_password/forgot_password_screen.dart';
 import 'package:flutter_native_interaction/screens/login_success/login_success_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../components/default_button.dart';
 import '../../../constants.dart';
@@ -71,8 +72,9 @@ class _SignFormState extends State<SignForm> {
           SizedBox(height: getProportionateScreenHeight(20)),
           DefaultButton(
             text: "Continue",
-            press: () {
+            press: () async {
               if (_formKey.currentState.validate()) {
+                //////////////////////////// Todo
                 _formKey.currentState.save();
                 Navigator.pushNamed(context, LoginSuccessScreen.routeName);
               }
@@ -82,6 +84,25 @@ class _SignFormState extends State<SignForm> {
       ),
     );
   }
+
+  // signIn(BuildContext context, email, password) async {
+  //   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  //   Map data = {
+  //     'email': email,
+  //     'password': password
+  //   };
+  //   var jsonResponse = null;
+  //   var response = await http.post("YOUR_BASE_URL", body: data);
+  //   if(response.statusCode == 200) {
+  //     jsonResponse = json.decode(response.body);
+  //     if(jsonResponse != null) {
+  //       setState(() {
+  //         _isLoading = false;
+  //       });
+
+  //   sharedPreferences.setString("token", jsonResponse['token']);
+
+  // }
 
   TextFormField buildPasswordFormField() {
     return TextFormField(
@@ -99,7 +120,7 @@ class _SignFormState extends State<SignForm> {
         if (value.isEmpty) {
           addError(error: kPassNullError);
           return "";
-        } else if (value.length < 8) {
+        } else if (value.length < 6) {
           addError(error: kShortPassError);
           return "";
         }

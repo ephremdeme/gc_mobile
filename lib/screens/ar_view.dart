@@ -5,14 +5,15 @@ class ArPage extends StatefulWidget {
   ArPage({Key key, this.title}) : super(key: key);
 
   final String title;
-
+  static String routeName = "/Ar_page";
+  
   @override
   _ArPageState createState() => _ArPageState();
 }
 
 class _ArPageState extends State<ArPage> {
   static const platform = const MethodChannel('arcore');
-
+  
   // String _message = "No messages yet...";
 
   void initState() {

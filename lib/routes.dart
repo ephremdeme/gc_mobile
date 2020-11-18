@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_native_interaction/screens/ar_view.dart';
 import 'package:flutter_native_interaction/screens/complete_profile/complete_profile_screen.dart';
+import 'package:flutter_native_interaction/screens/cart/cart_screen.dart';
 import 'package:flutter_native_interaction/screens/forgot_password/forgot_password_screen.dart';
 import 'package:flutter_native_interaction/screens/login_success/login_success_screen.dart';
 import 'package:flutter_native_interaction/screens/otp/otp_screen.dart';
@@ -17,4 +18,5 @@ final Map<String, WidgetBuilder> routes = {
   CompleteProfileScreen.routeName: (context) => CompleteProfileScreen(),
   OtpScreen.routeName: (context) => OtpScreen(),
   ArPage.routeName: (context) => ArPage(),
+  CartScreen.routeName: (context) => CartScreen(),
 };

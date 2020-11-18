@@ -23,8 +23,8 @@ class Body extends StatelessWidget {
           child: Column(
             children: [
               ProductDescription(
-                // product: product,
-                // pressOnSeeMore: () {},
+                product: product,
+                pressOnSeeMore: () {},
               ),
               TopRoundedContainer(
                 color: Color(0xFFF6F7F9),

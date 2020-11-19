@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_interaction/models/Product.dart';
 import 'package:flutter_native_interaction/components/product_card.dart';
-import 'package:flutter_native_interaction/models/Product.dart';
 
 import '../../../size_config.dart';
 import 'section_title.dart';

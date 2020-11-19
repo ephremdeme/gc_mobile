@@ -1,7 +1,9 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_native_interaction/components/custom_suffix_icon.dart';
 import 'package:flutter_native_interaction/components/form_error.dart';
+import 'package:flutter_native_interaction/models/AuthData.dart';
 import 'package:flutter_native_interaction/screens/forgot_password/forgot_password_screen.dart';
 import 'package:flutter_native_interaction/screens/login_failed/login_failed.dart';
 import 'package:flutter_native_interaction/screens/login_success/login_success_screen.dart';
@@ -81,16 +83,12 @@ class _SignFormState extends State<SignForm> {
                     return cache;
                   },
                   onCompleted: (dynamic resultData) async {
-                    print(resultData);
+                    AuthData authData = AuthData.fromJson(resultData);
                     if (resultData != null) {
                       SharedPreferences sharedPreferences =
                           await SharedPreferences.getInstance();
-                      Map<String, String> data = jsonDecode(resultData);
-                      final response = data['login'];
-                      print(response);
-                      // final token = response['token'].toString();
-                      // sharedPreferences.setString("token", token);
-                      // print(sharedPreferences.getString('token'));
+                      sharedPreferences.setString("token", authData.login.token);
+                      print(sharedPreferences.getString('token'));
                     }
                     Navigator.pushNamed(context, LoginSuccessScreen.routeName);
                   },

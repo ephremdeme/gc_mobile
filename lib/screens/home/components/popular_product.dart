@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_interaction/models/Product.dart';
-// import 'package:shop_app/components/product_card.dart';
+import 'package:shop_app/components/product_card.dart';
 // import 'package:shop_app/models/Product.dart';
 
 import '../../../size_config.dart';

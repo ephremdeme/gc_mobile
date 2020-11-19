@@ -1,4 +1,5 @@
-import 'package:graphql/client.dart';
+import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final HttpLink _httpLink = HttpLink(
@@ -18,7 +19,9 @@ final AuthLink _authLink = AuthLink(
 
 final Link _link = _authLink.concat(_httpLink);
 
-final GraphQLClient _client = GraphQLClient(
-  cache: InMemoryCache(),
-  link: _link,
-);
+ValueNotifier<GraphQLClient> client = ValueNotifier<GraphQLClient>(
+    GraphQLClient(
+      cache: InMemoryCache(),
+      link: _link,
+    ),
+  );

@@ -1,10 +1,14 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_interaction/components/custom_suffix_icon.dart';
 import 'package:flutter_native_interaction/components/form_error.dart';
 import 'package:flutter_native_interaction/screens/forgot_password/forgot_password_screen.dart';
+import 'package:flutter_native_interaction/screens/login_failed/login_failed.dart';
 import 'package:flutter_native_interaction/screens/login_success/login_success_screen.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../graphql/mutations/login.dart';
 import '../../../components/default_button.dart';
 import '../../../constants.dart';
 import '../../../size_config.dart';
@@ -16,7 +20,7 @@ class SignForm extends StatefulWidget {
 
 class _SignFormState extends State<SignForm> {
   final _formKey = GlobalKey<FormState>();
-  String email;
+  String userName;
   String password;
   bool remember = false;
   final List<String> errors = [];
@@ -41,7 +45,7 @@ class _SignFormState extends State<SignForm> {
       key: _formKey,
       child: Column(
         children: [
-          buildEmailFormField(),
+          buildUserNameFormField(),
           SizedBox(height: getProportionateScreenHeight(30)),
           buildPasswordFormField(),
           SizedBox(height: getProportionateScreenHeight(30)),
@@ -70,38 +74,56 @@ class _SignFormState extends State<SignForm> {
           ),
           FormError(errors: errors),
           SizedBox(height: getProportionateScreenHeight(20)),
-          DefaultButton(
-            text: "Continue",
-            press: () async {
-              if (_formKey.currentState.validate()) {
-                //////////////////////////// Todo
-                _formKey.currentState.save();
-                Navigator.pushNamed(context, LoginSuccessScreen.routeName);
-              }
-            },
-          ),
+          Mutation(
+              options: MutationOptions(
+                  documentNode: gql(login),
+                  update: (Cache cache, QueryResult result) {
+                    return cache;
+                  },
+                  onCompleted: (dynamic resultData) async {
+                    print(resultData);
+                    if (resultData != null) {
+                      SharedPreferences sharedPreferences =
+                          await SharedPreferences.getInstance();
+                      Map<String, String> data = jsonDecode(resultData);
+                      final response = data['login'];
+                      print(response);
+                      // final token = response['token'].toString();
+                      // sharedPreferences.setString("token", token);
+                      // print(sharedPreferences.getString('token'));
+                    }
+                    Navigator.pushNamed(context, LoginSuccessScreen.routeName);
+                  },
+                  onError: (OperationException exception) {
+                    print(exception.graphqlErrors);
+                    Navigator.pushNamed(context, LoginFailedScreen.routeName);
+                  }),
+              builder: (
+                RunMutation runMutation,
+                QueryResult result,
+              ) {
+                return DefaultButton(
+                  text: "Continue",
+                  press: () async {
+                    if (_formKey.currentState.validate()) {
+                      //////////////////////////// Todo
+                      _formKey.currentState.save();
+                      runMutation({
+                        "username": userName,
+                        "password": password,
+                      });
+                    }
+                  },
+                );
+              }),
         ],
       ),
     );
   }
 
   // signIn(BuildContext context, email, password) async {
-  //   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  //   Map data = {
-  //     'email': email,
-  //     'password': password
-  //   };
-  //   var jsonResponse = null;
-  //   var response = await http.post("YOUR_BASE_URL", body: data);
-  //   if(response.statusCode == 200) {
-  //     jsonResponse = json.decode(response.body);
-  //     if(jsonResponse != null) {
-  //       setState(() {
-  //         _isLoading = false;
-  //       });
-
-  //   sharedPreferences.setString("token", jsonResponse['token']);
-
+  //   //   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  //   //   sharedPreferences.setString("token", jsonResponse['token']);
   // }
 
   TextFormField buildPasswordFormField() {
@@ -135,31 +157,39 @@ class _SignFormState extends State<SignForm> {
     );
   }
 
-  TextFormField buildEmailFormField() {
+  TextFormField buildUserNameFormField() {
     return TextFormField(
-      keyboardType: TextInputType.emailAddress,
-      onSaved: (newValue) => email = newValue,
+      keyboardType: TextInputType.text,
+      onSaved: (newValue) => userName = newValue,
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kEmailNullError);
-        } else if (emailValidatorRegExp.hasMatch(value)) {
-          removeError(error: kInvalidEmailError);
         }
+        // else if (emailValidatorRegExp.hasMatch(value)) {
+        //   removeError(error: kInvalidEmailError);
+        // }
         return null;
       },
+      // validator: (value) {
+      //   if (value.isEmpty) {
+      //     addError(error: kEmailNullError);
+      //     return "";
+      //   } else if (!emailValidatorRegExp.hasMatch(value)) {
+      //     addError(error: kInvalidEmailError);
+      //     return "";
+      //   }
+      //   return null;
+      // },
       validator: (value) {
         if (value.isEmpty) {
           addError(error: kEmailNullError);
-          return "";
-        } else if (!emailValidatorRegExp.hasMatch(value)) {
-          addError(error: kInvalidEmailError);
           return "";
         }
         return null;
       },
       decoration: InputDecoration(
-        labelText: "Email",
-        hintText: "Enter your email",
+        labelText: "User name",
+        hintText: "Enter your user name",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSuffixIcon(svgIcon: "assets/icons/Mail.svg"),
       ),

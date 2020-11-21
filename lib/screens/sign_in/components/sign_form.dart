@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_native_interaction/components/custom_suffix_icon.dart';
 import 'package:flutter_native_interaction/components/form_error.dart';
@@ -119,11 +117,6 @@ class _SignFormState extends State<SignForm> {
     );
   }
 
-  // signIn(BuildContext context, email, password) async {
-  //   //   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  //   //   sharedPreferences.setString("token", jsonResponse['token']);
-  // }
-
   TextFormField buildPasswordFormField() {
     return TextFormField(
       obscureText: true,
@@ -131,7 +124,7 @@ class _SignFormState extends State<SignForm> {
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kPassNullError);
-        } else if (value.length >= 8) {
+        } else if (value.length >= 6) {
           removeError(error: kShortPassError);
         }
         return null;

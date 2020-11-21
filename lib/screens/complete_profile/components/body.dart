@@ -5,6 +5,7 @@ import 'package:flutter_native_interaction/size_config.dart';
 import 'complete_profile_form.dart';
 
 class Body extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(

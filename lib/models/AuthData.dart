@@ -4,18 +4,18 @@ class AuthData {
   final Login login;
 
   AuthData({
-    this.login
+    this.login,
   });
 
   factory AuthData.fromJson(Map<String, dynamic> data) {
     return AuthData(
-      login: Login.fromJson(data["login"])
+      login: Login.fromJson(data["login"]),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "login": login.toJson()
+      "login": login.toJson(),
     };
   }
 }

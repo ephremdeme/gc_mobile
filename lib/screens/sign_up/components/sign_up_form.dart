@@ -3,6 +3,7 @@ import 'package:flutter_native_interaction/components/custom_suffix_icon.dart';
 import 'package:flutter_native_interaction/components/default_button.dart';
 import 'package:flutter_native_interaction/components/form_error.dart';
 import 'package:flutter_native_interaction/screens/complete_profile/complete_profile_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants.dart';
 import '../../../size_config.dart';
@@ -14,7 +15,7 @@ class SignUpForm extends StatefulWidget {
 
 class _SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
-  String email;
+  String userName;
   String password;
   // ignore: non_constant_identifier_names
   String confirm_password;
@@ -41,7 +42,7 @@ class _SignUpFormState extends State<SignUpForm> {
       key: _formKey,
       child: Column(
         children: [
-          buildEmailFormField(),
+          buildUserNameFormField(),
           SizedBox(height: getProportionateScreenHeight(30)),
           buildPasswordFormField(),
           SizedBox(height: getProportionateScreenHeight(30)),
@@ -50,9 +51,17 @@ class _SignUpFormState extends State<SignUpForm> {
           SizedBox(height: getProportionateScreenHeight(40)),
           DefaultButton(
             text: "Continue",
-            press: () {
+            press: () async {
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
+                try {
+                  SharedPreferences sharedPreferences =
+                          await SharedPreferences.getInstance();
+                      sharedPreferences.setString("password", password);
+                      sharedPreferences.setString("userName", userName);
+                } catch (Exception) {
+                  print(Exception.toString());
+                }
                 Navigator.pushNamed(context, CompleteProfileScreen.routeName);
               }
             },
@@ -100,7 +109,7 @@ class _SignUpFormState extends State<SignUpForm> {
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kPassNullError);
-        } else if (value.length >= 8) {
+        } else if (value.length >= 6) {
           removeError(error: kShortPassError);
         }
         password = value;
@@ -109,7 +118,7 @@ class _SignUpFormState extends State<SignUpForm> {
         if (value.isEmpty) {
           addError(error: kPassNullError);
           return "";
-        } else if (value.length < 8) {
+        } else if (value.length < 6) {
           addError(error: kShortPassError);
           return "";
         }
@@ -124,15 +133,13 @@ class _SignUpFormState extends State<SignUpForm> {
     );
   }
 
-  TextFormField buildEmailFormField() {
+  TextFormField buildUserNameFormField() {
     return TextFormField(
-      keyboardType: TextInputType.emailAddress,
-      onSaved: (newValue) => email = newValue,
+      keyboardType: TextInputType.text,
+      onSaved: (newValue) => userName = newValue,
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kEmailNullError);
-        } else if (emailValidatorRegExp.hasMatch(value)) {
-          removeError(error: kInvalidEmailError);
         }
         return null;
       },
@@ -140,18 +147,16 @@ class _SignUpFormState extends State<SignUpForm> {
         if (value.isEmpty) {
           addError(error: kEmailNullError);
           return "";
-        } else if (!emailValidatorRegExp.hasMatch(value)) {
-          addError(error: kInvalidEmailError);
-          return "";
         }
         return null;
       },
       decoration: InputDecoration(
-        labelText: "Email",
-        hintText: "Enter your email",
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: CustomSuffixIcon(svgIcon: "assets/icons/Mail.svg"),
-      ),
+          labelText: "User name",
+          hintText: "Enter your user name",
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          suffixIcon: Icon(Icons
+              .person) // CustomSuffixIcon(svgIcon: "assets/icons/Mail.svg"),
+          ),
     );
   }
 }

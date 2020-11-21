@@ -6,11 +6,11 @@ String login = '''mutation Login(\$username: String!, \$password: String!){
   {
     id,
     token,
-    User {
+    User{
       username
       phone
       id
-    }
+    } 
   }
 }''';
 

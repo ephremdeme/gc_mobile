@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_interaction/components/custom_suffix_icon.dart';
 import 'package:flutter_native_interaction/components/form_error.dart';
 import 'package:flutter_native_interaction/models/AuthData.dart';
+import 'package:flutter_native_interaction/models/User.dart';
 import 'package:flutter_native_interaction/screens/forgot_password/forgot_password_screen.dart';
 import 'package:flutter_native_interaction/screens/login_failed/login_failed.dart';
 import 'package:flutter_native_interaction/screens/login_success/login_success_screen.dart';
@@ -82,17 +83,20 @@ class _SignFormState extends State<SignForm> {
                   },
                   onCompleted: (dynamic resultData) async {
                     AuthData authData = AuthData.fromJson(resultData);
+                    User user = authData.login.user;
+                    print(user.username + user.phone);
                     if (resultData != null) {
                       SharedPreferences sharedPreferences =
                           await SharedPreferences.getInstance();
-                      sharedPreferences.setString("token", authData.login.token);
+                      sharedPreferences.setString(
+                          "token", authData.login.token);
                       print(sharedPreferences.getString('token'));
                     }
-                    Navigator.pushNamed(context, LoginSuccessScreen.routeName);
+                    Navigator.popAndPushNamed(context, LoginSuccessScreen.routeName);
                   },
                   onError: (OperationException exception) {
                     print(exception.graphqlErrors);
-                    Navigator.pushNamed(context, LoginFailedScreen.routeName);
+                    Navigator.popAndPushNamed(context, LoginFailedScreen.routeName);
                   }),
               builder: (
                 RunMutation runMutation,

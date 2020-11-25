@@ -7,7 +7,7 @@ import 'package:flutter_native_interaction/models/User.dart';
 class Product {
   final int id;
   final String name, description;
-  final List<String> images;
+  final List<Image> images;
   final Rate rate;
   final double price;
   final int quantity;
@@ -40,7 +40,7 @@ class Product {
       seller: User.fromJson(data['seller']),
       category: Category.fromJson(data['category']),
       subCategory: Category.fromJson(data['subCategory']),
-      // images: Image.fromJson(data['images']),
+      images: data['images'],
       comment: Comment.fromJson(data['comment']),
     );
   }

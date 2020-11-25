@@ -1,6 +1,6 @@
 class Image {
-  final int id;
-  final String filename;
+  int id;
+  String filename;
 
   Image({this.id, this.filename});
 
@@ -8,3 +8,6 @@ class Image {
     return Image(id: data['id'], filename: data['filename']);
   }
 }
+
+// pass the images array values to this constructor to get
+// each image filename and id 

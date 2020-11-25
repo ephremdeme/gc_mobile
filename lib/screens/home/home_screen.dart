@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_interaction/size_config.dart';
 
 import 'components/body.dart';
 
@@ -15,7 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (context) => new AlertDialog(
         title: new Text('Are you sure?'),
-        content: new Text('Do you want to exit an App'),
+        content: new Text('Do you want to exit the App'),
         actions: <Widget>[
           new FlatButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -32,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
       body: WillPopScope(
         onWillPop: _onWillPop,

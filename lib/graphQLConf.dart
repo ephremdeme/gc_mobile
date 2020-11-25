@@ -3,7 +3,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final HttpLink _httpLink = HttpLink(
-  uri: 'https://engu-api.herokuapp.com/graphql',
+  uri: 'http://192.168.137.104:5001/graphql',
 );
 
 SharedPreferences sharedPreferences;

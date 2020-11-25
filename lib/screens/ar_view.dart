@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class ArPage extends StatefulWidget {
-  ArPage({Key key, this.title}) : super(key: key);
-
-  final String title;
   static String routeName = "/Ar_page";
   
   @override
@@ -29,7 +26,7 @@ class _ArPageState extends State<ArPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(widget.title),
+          title: Text('ArPage'),
         ),
         body: ListView(
           children: <Widget> [

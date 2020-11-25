@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_interaction/components/default_button.dart';
+// import 'package:flutter_native_interaction/screens/ar_view.dart';
 import 'package:flutter_native_interaction/screens/home/home_screen.dart';
 import 'package:flutter_native_interaction/size_config.dart';
 
@@ -29,6 +30,7 @@ class Body extends StatelessWidget {
             text: "Back to home",
             press: () {
               Navigator.popAndPushNamed(context, HomeScreen.routeName);
+              // Navigator.popAndPushNamed(context, ArPage.routeName,);
             },
           ),
         ),

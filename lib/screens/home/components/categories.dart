@@ -1,31 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_interaction/models/Category.dart';
+import 'package:flutter_native_interaction/models/CategoryResponse.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 import '../../../size_config.dart';
+import '../../../graphql/querys/categories.dart';
 
 class Categories extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> categories = [
-      {"icon": "assets/icons/Flash Icon.svg", "text": "Flash Deal"},
-      {"icon": "assets/icons/Bill Icon.svg", "text": "Bill"},
-      {"icon": "assets/icons/Game Icon.svg", "text": "Game"},
-      {"icon": "assets/icons/Gift Icon.svg", "text": "Daily Gift"},
-      {"icon": "assets/icons/Discover.svg", "text": "More"},
-    ];
     return Padding(
       padding: EdgeInsets.all(getProportionateScreenWidth(20)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: List.generate(
-          categories.length,
-          (index) => CategoryCard(
-            icon: categories[index]["icon"],
-            text: categories[index]["text"],
-            press: () {},
-          ),
+      child: Query(
+        options: QueryOptions(
+          documentNode: gql(readCategories),
+          pollInterval: 20,
         ),
+        builder: (QueryResult result,
+            {VoidCallback refetch, FetchMore fetchMore}) {
+          if (result.hasException) {
+            return Text(result.exception.toString());
+          }
+
+          if (result.loading) {
+            return Text('Loading');
+          }
+          List<dynamic> category = result.data["categories"];
+
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: List.generate(
+                category.length,
+                (index) => CategoryCard(
+                  text: category[index]["category"],
+                  press: () {},
+                ),
+              ),
+            )
+          );
+        },
       ),
     );
   }
@@ -34,12 +49,11 @@ class Categories extends StatelessWidget {
 class CategoryCard extends StatelessWidget {
   const CategoryCard({
     Key key,
-    @required this.icon,
     @required this.text,
     @required this.press,
   }) : super(key: key);
 
-  final String icon, text;
+  final String text;
   final GestureTapCallback press;
 
   @override
@@ -47,21 +61,20 @@ class CategoryCard extends StatelessWidget {
     return GestureDetector(
       onTap: press,
       child: SizedBox(
-        width: getProportionateScreenWidth(55),
+        width: getProportionateScreenWidth(90),
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.all(getProportionateScreenWidth(15)),
-              height: getProportionateScreenWidth(55),
-              width: getProportionateScreenWidth(55),
+              margin: EdgeInsets.all(getProportionateScreenWidth(5)),
+              padding: EdgeInsets.all(getProportionateScreenWidth(5)),
+              height: getProportionateScreenWidth(30),
+              width: getProportionateScreenWidth(90),
               decoration: BoxDecoration(
                 color: Color(0xFFFFECDF),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(6),
               ),
-              child: SvgPicture.asset(icon),
+              child: Text(text, textAlign: TextAlign.center),
             ),
-            SizedBox(height: 5),
-            Text(text, textAlign: TextAlign.center)
           ],
         ),
       ),

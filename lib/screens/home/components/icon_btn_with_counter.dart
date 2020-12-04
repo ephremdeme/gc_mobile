@@ -8,7 +8,7 @@ class IconBtnWithCounter extends StatelessWidget {
   const IconBtnWithCounter({
     Key key,
     @required this.svgSrc,
-    this.numOfitem = 0,
+    this.numOfitem,
     @required this.press,
   }) : super(key: key);
 
@@ -48,7 +48,7 @@ class IconBtnWithCounter extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    "$numOfitem",
+                    "${numOfitem.toString()}",
                     style: TextStyle(
                       fontSize: getProportionateScreenWidth(10),
                       height: 1,

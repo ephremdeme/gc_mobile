@@ -27,7 +27,7 @@ class ProductCard extends StatelessWidget {
           onTap: () => Navigator.pushNamed(
             context,
             DetailsScreen.routeName,
-            arguments: ProductDetailsArguments(product: product),
+            // arguments: ProductDetailsArguments(product: product),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

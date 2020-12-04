@@ -17,7 +17,7 @@ class CustomAppBar extends PreferredSize {
     return SafeArea(
       child: Padding(
         padding:
-            EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
+            EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(30), vertical: getProportionateScreenHeight(10)),
         child: Row(
           children: [
             SizedBox(

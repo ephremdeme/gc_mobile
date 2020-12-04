@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_native_interaction/models/Category.dart';
-import 'package:flutter_native_interaction/models/CategoryResponse.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_native_interaction/screens/home/category_screen.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 import '../../../size_config.dart';
@@ -15,7 +13,7 @@ class Categories extends StatelessWidget {
       child: Query(
         options: QueryOptions(
           documentNode: gql(readCategories),
-          pollInterval: 20,
+          pollInterval: 1000,
         ),
         builder: (QueryResult result,
             {VoidCallback refetch, FetchMore fetchMore}) {
@@ -29,17 +27,22 @@ class Categories extends StatelessWidget {
           List<dynamic> category = result.data["categories"];
 
           return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: List.generate(
-                category.length,
-                (index) => CategoryCard(
-                  text: category[index]["category"],
-                  press: () {},
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: List.generate(
+                  category.length,
+                  (index) => CategoryCard(
+                    text: category[index]["category"],
+                    press: () {
+                      Navigator.pushNamed(
+                        context,
+                        CategoryScreen.routeName,
+                        arguments: category[index]["id"]
+                      );
+                    },
+                  ),
                 ),
-              ),
-            )
-          );
+              ));
         },
       ),
     );

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_interaction/providers/cart.dart';
+import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
 import '../../../size_config.dart';
@@ -6,14 +8,16 @@ import '../../../size_config.dart';
 class CartCard extends StatelessWidget {
   const CartCard({
     Key key,
-   // @required this.cart,
+    // @required this.cart,
+    this.name,
   }) : super(key: key);
 
-  
 //final Cart cart;
+  final String name;
 
   @override
   Widget build(BuildContext context) {
+    final cart = Provider.of<Cart>(context);
     return Row(
       children: [
         SizedBox(
@@ -26,7 +30,7 @@ class CartCard extends StatelessWidget {
                 color: Color(0xFFF5F6F9),
                 borderRadius: BorderRadius.circular(15),
               ),
-             // child: Image.asset(cart.product.images[0]),
+              child: Text("image"),
             ),
           ),
         ),
@@ -35,7 +39,7 @@ class CartCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-             "product tittle",
+              name,
               style: TextStyle(color: Colors.black, fontSize: 16),
               maxLines: 2,
             ),
@@ -47,7 +51,7 @@ class CartCard extends StatelessWidget {
                     fontWeight: FontWeight.w600, color: kPrimaryColor),
                 children: [
                   TextSpan(
-                      text: " number of item}",
+                      text: "number of item",
                       style: Theme.of(context).textTheme.bodyText1),
                 ],
               ),

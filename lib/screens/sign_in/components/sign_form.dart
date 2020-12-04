@@ -52,16 +52,16 @@ class _SignFormState extends State<SignForm> {
           SizedBox(height: getProportionateScreenHeight(30)),
           Row(
             children: [
-              Checkbox(
-                value: remember,
-                activeColor: kPrimaryColor,
-                onChanged: (value) {
-                  setState(() {
-                    remember = value;
-                  });
-                },
-              ),
-              Text("Remember me"),
+              // Checkbox(
+              //   value: remember,
+              //   activeColor: kPrimaryColor,
+              //   onChanged: (value) {
+              //     setState(() {
+              //       remember = value;
+              //     });
+              //   },
+              // ),
+              // Text("Remember me"),
               Spacer(),
               GestureDetector(
                 onTap: () => Navigator.pushNamed(
@@ -84,7 +84,7 @@ class _SignFormState extends State<SignForm> {
                   onCompleted: (dynamic resultData) async {
                     AuthData authData = AuthData.fromJson(resultData);
                     User user = authData.login.user;
-                    print(user.username + user.phone);
+                    print(user.username + " " +user.phone);
                     if (resultData != null) {
                       SharedPreferences sharedPreferences =
                           await SharedPreferences.getInstance();

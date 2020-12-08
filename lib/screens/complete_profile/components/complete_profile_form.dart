@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_interaction/components/custom_suffix_icon.dart';
 import 'package:flutter_native_interaction/components/default_button.dart';
 import 'package:flutter_native_interaction/components/form_error.dart';
 import 'package:flutter_native_interaction/models/AuthDataSignUp.dart';
 import 'package:flutter_native_interaction/screens/login_failed/login_failed.dart';
+import 'package:flutter_native_interaction/screens/login_success/login_success_screen.dart';
 import 'package:flutter_native_interaction/screens/otp/otp_screen.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,7 +25,6 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
   String firstName;
   String lastName;
   String phone;
-  // String address;
 
   void addError({String error}) {
     if (!errors.contains(error))
@@ -50,8 +51,6 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
           buildLastNameFormField(),
           SizedBox(height: getProportionateScreenHeight(30)),
           buildPhoneNumberFormField(),
-          // SizedBox(height: getProportionateScreenHeight(30)),
-          // buildAddressFormField(),
           FormError(errors: errors),
           SizedBox(height: getProportionateScreenHeight(40)),
           Mutation(
@@ -64,18 +63,24 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
                     SharedPreferences sharedPreferences =
                         await SharedPreferences.getInstance();
                     print(resultData);
-                    AuthDataSignUp authData =
-                        AuthDataSignUp.fromJson(resultData);
                     if (resultData != null) {
+                      AuthDataSignUp authData =
+                          AuthDataSignUp.fromJson(resultData);
                       sharedPreferences.setString(
-                          "token", authData.signUp.token);
-                      print(sharedPreferences.getString('token'));
+                          "token", "Bearer " + authData.signUp.token);
+                      // print(sharedPreferences.getString('token'));
                     }
-                    Navigator.pushNamed(context, OtpScreen.routeName);
+                    // Navigator.pushNamed(context, OtpScreen.routeName);
+                    Navigator.popAndPushNamed(
+                        context, LoginSuccessScreen.routeName);
                   },
                   onError: (OperationException exception) {
-                    print(exception.graphqlErrors);
-                    Navigator.pushNamed(context, LoginFailedScreen.routeName);
+                    addError(error: exception.graphqlErrors.toString());
+                    Navigator.popAndPushNamed(
+                      context,
+                      LoginFailedScreen.routeName,
+                      arguments: exception.graphqlErrors,
+                    );
                   }),
               builder: (
                 RunMutation runMutation,
@@ -88,6 +93,8 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
                         await SharedPreferences.getInstance();
                     String tempuser = sharedPreferences.getString("userName");
                     String temppass = sharedPreferences.getString("password");
+                    await sharedPreferences.setString("phone", phone);
+                    // print(phone); //temppass + " " + tempuser + " " + 
                     if (_formKey.currentState.validate()) {
                       //////////////////////////// Todo
                       _formKey.currentState.save();
@@ -106,32 +113,6 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
       ),
     );
   }
-
-  // TextFormField buildAddressFormField() {
-  //   return TextFormField(
-  //     onSaved: (newValue) => address = newValue,
-  //     onChanged: (value) {
-  //       if (value.isNotEmpty) {
-  //         removeError(error: kAddressNullError);
-  //       }
-  //       return null;
-  //     },
-  //     validator: (value) {
-  //       if (value.isEmpty) {
-  //         addError(error: kAddressNullError);
-  //         return "";
-  //       }
-  //       return null;
-  //     },
-  //     decoration: InputDecoration(
-  //       labelText: "Address",
-  //       hintText: "Enter your phone address",
-  //       floatingLabelBehavior: FloatingLabelBehavior.always,
-  //       suffixIcon:
-  //           CustomSuffixIcon(svgIcon: "assets/icons/Location point.svg"),
-  //     ),
-  //   );
-  // }
 
   TextFormField buildPhoneNumberFormField() {
     return TextFormField(

@@ -42,7 +42,12 @@ class _BodyState extends State<Body> {
                       ),
                     ),
                     child:
-                        CartCard(name: cart.items.values.toList()[index].name),
+                        CartCard(
+                          name: cart.items.values.toList()[index].name,
+                          price: cart.items.values.toList()[index].price,
+                          quantity: cart.items.values.toList()[index].quantity,
+                          image: cart.items.values.toList()[index].image,
+                        ),
                   ),
                 )));
   }

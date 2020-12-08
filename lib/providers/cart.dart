@@ -10,7 +10,7 @@ class CartItem {
 
   CartItem({
     @required this.id,
-    this.image,
+    @required this.image,
     @required this.name,
     @required this.price,
     @required this.quantity,
@@ -45,12 +45,13 @@ class Cart with ChangeNotifier {
               id: existingCartItem.id,
               name: existingCartItem.name,
               price: existingCartItem.price,
-              quantity: existingCartItem.quantity));
+              quantity: existingCartItem.quantity,
+              image: existingCartItem.image));
     } else {
       _items.putIfAbsent(
           productId,
           () =>
-              CartItem(id: Uuid().v4(), name: name, price: price, quantity: 1));
+              CartItem(id: Uuid().v4(), name: name, price: price, quantity: 1, image: image));
     }
     notifyListeners();
   }

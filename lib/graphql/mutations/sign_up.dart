@@ -4,7 +4,7 @@ String signUp = '''mutation SignUp(\$username: String!, \$password: String!, \$p
     password: \$password,
     phone: \$phone,
     first_name: \$first_name,
-    last_name: \$last_name
+    last_name: \$last_name,
   )
   {
     id,

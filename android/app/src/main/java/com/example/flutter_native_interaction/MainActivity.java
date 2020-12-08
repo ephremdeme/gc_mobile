@@ -13,7 +13,7 @@ import io.flutter.plugin.common.MethodChannel;
 
 public class MainActivity extends FlutterActivity {
     private static final String CHANNEL = "arcore";
-
+//    public static
     @Override
     public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
         super.configureFlutterEngine(flutterEngine);
@@ -23,11 +23,10 @@ public class MainActivity extends FlutterActivity {
                     final Map<String, Object> arguments = call.arguments();
 
                     if(call.method.equals("getMessage")) {
-//                        String from = (String) arguments.get("from");
-//                        String message = "From native android " + from;
-//                        result.success(message);
-//                        openWebPage("http://google.com");
-                        openActivity2();
+                        String modelUrl = (String) arguments.get("modelUrl");
+                        result.success(modelUrl);
+
+                        openActivity2(modelUrl);
                     } else {
                         result.notImplemented();
                     }
@@ -35,16 +34,9 @@ public class MainActivity extends FlutterActivity {
             );
     }
 
-    public void openActivity2() {
+    public void openActivity2(String modelUrl) {
         Intent intent = new Intent(this, Activity2.class);
+        intent.putExtra("modelUrl", modelUrl);
         startActivity(intent);
-    }
-
-    public void openWebPage(String url) {
-        Uri webpage = Uri.parse(url);
-        Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
-        if(intent.resolveActivity(getPackageManager()) != null) {
-            startActivity(intent);
-        }
     }
 }

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -42,14 +43,20 @@ import java.net.URL;
 
 public class Activity2 extends AppCompatActivity {
 
+    String modelUrl;
+
     private ArFragment arFragment;
 //    private String assetModel = "https://poly.googleusercontent.com/downloads/c/fp/1602302627357152/0BnDT3T1wTE/85QOHCZOvov/Mesh_Beagle.gltf";
 //    private String assetModel = "https://www.mediafire.com/file/ht0s1x3akcaobct/chair.glb";
-    private String assetModel = "http://192.168.137.1/chair.glb";
+    private String assetModel = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        modelUrl = intent.getStringExtra("modelUrl");
+        assetModel = modelUrl;
+
+                super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_2);
 
         arFragment = (ArFragment) getSupportFragmentManager()

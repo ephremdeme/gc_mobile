@@ -1,13 +1,12 @@
-String login = '''mutation Login(\$username: String!, \$password: String!){
+String login = '''mutation Login(\$phone: String!, \$password: String!){
   login(
-    username: \$username,
+    phone: \$phone,
     password: \$password
   )
   {
     id,
     token,
     User{
-      username
       phone
       id
     } 

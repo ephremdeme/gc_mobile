@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_native_interaction/screens/sign_in/sign_in_screen.dart';
+import 'package:flutter_native_interaction/screens/home/home_screen.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,10 +14,10 @@ class Body extends StatelessWidget {
         onDone: () async {
           SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
           sharedPreferences.setString("first", "opened");
-          Navigator.popAndPushNamed(context, SignInScreen.routeName);
+          Navigator.popAndPushNamed(context, HomeScreen.routeName);
         },
         onSkip: () {
-          Navigator.popAndPushNamed(context, SignInScreen.routeName);
+          Navigator.popAndPushNamed(context, HomeScreen.routeName);
         },
         showSkipButton: true,
         skip: Text("skip", style: TextStyle(fontWeight: FontWeight.w600)),
@@ -40,19 +40,19 @@ class Body extends StatelessWidget {
     return [
       PageViewModel(
           image: Image.asset("assets/images/splash_1.png"),
-          title: 'First Title',
-          body: 'First Title First Title First Title First Title First Title',
-          footer: Text('GC Project')),
+          title: 'Hello there',
+          body: 'Welcome to AR Assisted Ecommerce, Let’s shop!',
+      ),
       PageViewModel(
           image: Image.asset("assets/images/splash_2.png"),
-          title: 'Second Title',
-          body: 'Second Title Second Title Second Title Second Title Second Title',
-          footer: Text('GC Project')),
+          title: 'What we do?',
+          body: 'We help buyers connect with sellers \naround Ethiopia',
+      ),
       PageViewModel(
           image: Image.asset("assets/images/splash_3.png"),
-          title: 'Third Title',
-          body: 'Third Title Third Title Third Title Third Title Third Title',
-          footer: Text('GC Project')),
+          title: 'Augmented Reality for your shop',
+          body: 'We upgrade your shopping exeperience \n by adding AR to your product view',
+      ),
     ];
   }
 }

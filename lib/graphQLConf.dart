@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final String serverLink = 'http://10.240.72.53:5001/';
+final String serverLink = 'http://192.168.137.127:5001/';
 
 final HttpLink _httpLink = HttpLink(
   uri: serverLink + 'graphql',

@@ -9,11 +9,11 @@ class Categories extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(getProportionateScreenWidth(20)),
+      padding: EdgeInsets.all(getProportionateScreenWidth(15)),
       child: Query(
         options: QueryOptions(
           documentNode: gql(readCategories),
-          pollInterval: 1000,
+          pollInterval: 4,
         ),
         builder: (QueryResult result,
             {VoidCallback refetch, FetchMore fetchMore}) {
@@ -22,7 +22,7 @@ class Categories extends StatelessWidget {
           }
 
           if (result.loading) {
-            return Text('Loading');
+            return Center(child: CircularProgressIndicator(),);
           }
           List<dynamic> category = result.data["categories"];
 

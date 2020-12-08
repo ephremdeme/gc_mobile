@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
+import '../../../graphQLConf.dart';
 import '../../../size_config.dart';
 import 'section_title.dart';
+import '../../../graphql/querys/products.dart';
 
 class SpecialOffers extends StatelessWidget {
   const SpecialOffers({
@@ -10,38 +13,69 @@ class SpecialOffers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding:
-              EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
-          child: SectionTitle(
-            title: "Special for you",
-            press: () {},
+    return Padding(
+      padding: const EdgeInsets.all(2.0),
+      child: Query(
+          options: QueryOptions(
+            documentNode: gql(newProducts),
+            variables: {'limit': 8, 'by_date': true},
+            pollInterval: 10,
           ),
-        ),
-        SizedBox(height: getProportionateScreenWidth(20)),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              SpecialOfferCard(
-                image: "assets/images/Image Banner 2.png",
-                category: "Smartphone",
-                numOfBrands: 18,
-                press: () {},
-              ),
-              SpecialOfferCard(
-                image: "assets/images/Image Banner 3.png",
-                category: "Fashion",
-                numOfBrands: 24,
-                press: () {},
-              ),
-              SizedBox(width: getProportionateScreenWidth(20)),
-            ],
-          ),
-        ),
-      ],
+          builder: (QueryResult result,
+              {VoidCallback refetch, FetchMore fetchMore}) {
+            if (result.hasException) {
+              return Text(result.exception.toString());
+            }
+            if (result.loading) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            List<dynamic> products = result.data["products"]["products"];
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: getProportionateScreenWidth(20)),
+                  child: SectionTitle(
+                    title: "New Arrived",
+                    press: () {},
+                  ),
+                ),     
+                SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    SpecialOfferCard(
+                          image: serverLink + "products/" + products[0]["id"].toString() + "/images/" + 
+                            products[0]["images"][0]["filename"].toString(),
+                          category: products[0]["subCategory"]["category"],
+                          numOfBrands: products[0]["quantity"],
+                          press: () {},
+                        ),
+                    SpecialOfferCard(
+                          image: serverLink + "products/" + products[1]["id"].toString() + "/images/" + 
+                            products[1]["images"][0]["filename"].toString(),
+                          category: products[1]["subCategory"]["category"],
+                          numOfBrands: products[1]["quantity"],
+                          press: () {},
+                        ),
+                    SpecialOfferCard(
+                          image: serverLink + "products/" + products[2]["id"].toString() + "/images/" + 
+                            products[2]["images"][0]["filename"].toString(),
+                          category: products[2]["subCategory"]["category"],
+                          numOfBrands: products[2]["quantity"],
+                          press: () {},
+                        ),                  
+                  ],
+                ),
+                  ),                
+              ],
+            );
+          }),
     );
   }
 }
@@ -72,8 +106,8 @@ class SpecialOfferCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             child: Stack(
               children: [
-                Image.asset(
-                  image,
+                Image(
+                  image: NetworkImage(image),
                   fit: BoxFit.cover,
                 ),
                 Container(
@@ -104,7 +138,7 @@ class SpecialOfferCard extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        TextSpan(text: "$numOfBrands Brands")
+                        TextSpan(text: "$numOfBrands Items")
                       ],
                     ),
                   ),

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_interaction/providers/cart.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 // import '../../../constants.dart';
 import '../../../size_config.dart';
 import '../../../components/default_button.dart';
+import '../../../graphql/mutations/check_out.dart';
 
 class CheckoutCard extends StatelessWidget {
   const CheckoutCard({
@@ -55,9 +57,45 @@ class CheckoutCard extends StatelessWidget {
                 ),
                 SizedBox(
                   width: getProportionateScreenWidth(190),
-                  child: DefaultButton(
+                  child: //Mutation(
+                  //   options: MutationOptions(
+                  //     documentNode: gql(checkOut),
+                  //     update: (Cache cache, QueryResult result) {
+                  //       return cache;
+                  //     },
+                  //     onCompleted: (dynamic resultData) async {
+                  //       if (resultData != null) {
+                  //         Navigator.popAndPushNamed(
+                  //           context, HomeScreen.routeName);
+                  //       } 
+                  //     },
+                  //     onError: (OperationException exception) {
+                  //       Navigator.popAndPushNamed(
+                  //         context,
+                  //         LoginFailedScreen.routeName,
+                  //         arguments: exception.graphqlErrors,
+                  //       );
+                  //     }),
+                  //   builder: (
+                  //     RunMutation runMutation,
+                  //     QueryResult result,
+                  //   ) {
+                  //     return DefaultButton(
+                  //       text: "Check Out",
+                  //       press: () async {
+                  //           Map<String, Map<>>
+                  //           runMutation({
+                  //             "orders": order,
+                  //           });
+                  //         }
+                  //     );
+                  //   }),
+                  // ), 
+                  DefaultButton(
                     text: "Check Out",
-                    press: () {},
+                    press: () async {
+
+                    },
                   ),
                 ),
               ],

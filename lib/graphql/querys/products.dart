@@ -4,8 +4,10 @@ String singleProduct = '''
       id,
       name,
       views,
-      description,
+      shortDescription,
+      fullDescription,
       price,
+      model,
       quantity,
       images {
         id,
@@ -29,4 +31,27 @@ String singleProduct = '''
       }
     }
   }
+''';
+
+String newProducts = ''' query NewProducts(\$limit: Int!, \$by_date: Boolean!){
+  products(
+    limit: \$limit,
+    by_date: \$by_date
+  ) {
+    count,
+    products {
+      id,
+      name,
+      price,
+      quantity,
+      images{
+        filename
+      },
+      subCategory {
+        id,
+        category
+      }
+    }
+  }
+}
 ''';

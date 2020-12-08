@@ -12,8 +12,8 @@ class SeeMore extends StatelessWidget {
     final List data =  ModalRoute.of(context).settings.arguments;
     return Scaffold(
       backgroundColor: Color(0xFFF5F6F9),
-      appBar: CustomAppBar(rating: 4.5), 
-      body: Body(id: data[0], images: data[1]),
+      appBar: CustomAppBar(id: data[0]), 
+      body: Body(id: data[0], images: data[1], description: data[2]),
     );
   }
 }

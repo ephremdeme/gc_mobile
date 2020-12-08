@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_interaction/constants.dart';
 import 'package:flutter_native_interaction/screens/details/details_screen.dart';
+import 'package:flutter_native_interaction/screens/home/home_screen.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_native_interaction/graphQLConf.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../providers/cart.dart';
 import '../../size_config.dart';
@@ -20,7 +22,35 @@ class CategoryScreen extends StatelessWidget {
     final int id = ModalRoute.of(context).settings.arguments;
 
     return SafeArea(
-        child: Scaffold(
+      child: Scaffold(
+        drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              child: Center(child: Text(
+                'AR Assisted \nEcommerce',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold
+                ),)),
+              decoration: BoxDecoration(
+                color: Colors.orange[400],
+              ),
+            ),
+            ListTile(
+              title: Text('Log out'),
+              onTap: () async {
+                SharedPreferences sharedPreferences =
+                    await SharedPreferences.getInstance();
+                sharedPreferences.setString("token", "");
+                Navigator.popAndPushNamed(context, HomeScreen.routeName);
+              },
+            ),
+          ],
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -46,14 +76,14 @@ class CategoryBody extends StatelessWidget {
     final cart = Provider.of<Cart>(context, listen: false);
 
     return Padding(
-        padding: EdgeInsets.all(getProportionateScreenWidth(5)),
+        padding: EdgeInsets.all(getProportionateScreenWidth(3)),
         child: Query(
             options: QueryOptions(
               documentNode: gql(singleCategory),
               variables: {
                 'id': id,
               },
-              pollInterval: 30,
+              pollInterval: 10,
             ),
             builder: (QueryResult result,
                 {VoidCallback refetch, FetchMore fetchMore}) {
@@ -61,11 +91,11 @@ class CategoryBody extends StatelessWidget {
                 return Text(result.exception.toString());
               }
               if (result.loading) {
-                return Text('Loading');
+                return Center(child: CircularProgressIndicator(),);
               }
               List<dynamic> category = result.data["category"]["products"];
-              print(category[0]);
-
+              // print(category[0]);
+            
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

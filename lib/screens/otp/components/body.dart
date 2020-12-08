@@ -1,10 +1,70 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_native_interaction/constants.dart';
+import 'package:flutter_native_interaction/screens/home/home_screen.dart';
 import 'package:flutter_native_interaction/size_config.dart';
-
-import 'otp_form.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_native_interaction/screens/login_success/login_success_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Body extends StatelessWidget {
+  Future<void> signUpUser(String phone, BuildContext context) async {
+    FirebaseAuth _auth = FirebaseAuth.instance;
+    // String phoneNo = "+251" + phone.toString();
+    // print(phoneNo);
+    _auth.verifyPhoneNumber(
+        phoneNumber: "+251920565749",// phoneNo,
+        timeout: Duration(seconds: 60),
+        verificationCompleted: (AuthCredential credential) async {
+          Navigator.popAndPushNamed(context, LoginSuccessScreen.routeName);
+          print("success");
+        },
+        verificationFailed: (FirebaseAuthException exception) {
+          print(exception);
+          return "error";
+        },
+        codeSent: (String verificationId, [int forceResendingToken]) {
+          final _codeController = TextEditingController();
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text("Enter the code"),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      TextField(
+                        controller: _codeController,
+                      ),
+                    ],
+                  ),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text("Confirm"),
+                      textColor: Colors.white,
+                      color: Colors.blue,
+                      onPressed: () async {
+                        final code = _codeController.text.trim();
+                        AuthCredential credential =
+                            PhoneAuthProvider.credential(
+                                verificationId: verificationId, smsCode: code);
+
+                        _auth.signInWithCredential(credential).then((value) {
+                          Navigator.popAndPushNamed(
+                              context, HomeScreen.routeName);
+                        }).catchError((e) {
+                          return "error";
+                        });
+                      },
+                    )
+                  ],
+                );
+              });
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {
+          verificationId = verificationId;
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -12,48 +72,18 @@ class Body extends StatelessWidget {
       child: Padding(
         padding:
             EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(height: SizeConfig.screenHeight * 0.05),
-              Text(
-                "OTP Verification",
-                style: headingStyle,
-              ),
-              Text("We sent your code to +1 898 860 ***"),
-              buildTimer(),
-              OtpForm(),
-              SizedBox(height: SizeConfig.screenHeight * 0.1),
-              GestureDetector(
-                onTap: () {
-                  // OTP code resend
-                },
-                child: Text(
-                  "Resend OTP Code",
-                  style: TextStyle(decoration: TextDecoration.underline),
-                ),
-              )
-            ],
+        child: Center(
+          child: GestureDetector(
+            child: Text("Enter code"),
+            onTap: () async {
+              SharedPreferences sharedPreferences =
+                  await SharedPreferences.getInstance();
+              String phone = sharedPreferences.getString("phone");
+              signUpUser(phone, context);
+            },
           ),
         ),
       ),
-    );
-  }
-
-  Row buildTimer() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text("This code will expired in "),
-        TweenAnimationBuilder(
-          tween: Tween(begin: 30.0, end: 0.0),
-          duration: Duration(seconds: 30),
-          builder: (_, value, child) => Text(
-            "00:${value.toInt()}",
-            style: TextStyle(color: kPrimaryColor),
-          ),
-        ),
-      ],
     );
   }
 }

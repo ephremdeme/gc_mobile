@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_interaction/components/custom_suffix_icon.dart';
 import 'package:flutter_native_interaction/components/form_error.dart';
 import 'package:flutter_native_interaction/models/AuthData.dart';
-import 'package:flutter_native_interaction/models/User.dart';
+// import 'package:flutter_native_interaction/models/User.dart';
 import 'package:flutter_native_interaction/screens/forgot_password/forgot_password_screen.dart';
 import 'package:flutter_native_interaction/screens/login_failed/login_failed.dart';
 import 'package:flutter_native_interaction/screens/login_success/login_success_screen.dart';
@@ -21,7 +21,7 @@ class SignForm extends StatefulWidget {
 
 class _SignFormState extends State<SignForm> {
   final _formKey = GlobalKey<FormState>();
-  String userName;
+  String phone;
   String password;
   bool remember = false;
   final List<String> errors = [];
@@ -46,22 +46,12 @@ class _SignFormState extends State<SignForm> {
       key: _formKey,
       child: Column(
         children: [
-          buildUserNameFormField(),
+          buildPhoneFormField(),
           SizedBox(height: getProportionateScreenHeight(30)),
           buildPasswordFormField(),
           SizedBox(height: getProportionateScreenHeight(30)),
           Row(
             children: [
-              // Checkbox(
-              //   value: remember,
-              //   activeColor: kPrimaryColor,
-              //   onChanged: (value) {
-              //     setState(() {
-              //       remember = value;
-              //     });
-              //   },
-              // ),
-              // Text("Remember me"),
               Spacer(),
               GestureDetector(
                 onTap: () => Navigator.pushNamed(
@@ -77,27 +67,32 @@ class _SignFormState extends State<SignForm> {
           SizedBox(height: getProportionateScreenHeight(20)),
           Mutation(
               options: MutationOptions(
-                  documentNode: gql(login),
-                  update: (Cache cache, QueryResult result) {
-                    return cache;
-                  },
-                  onCompleted: (dynamic resultData) async {
+                documentNode: gql(login),
+                update: (Cache cache, QueryResult result) {
+                  return cache;
+                },
+                onCompleted: (dynamic resultData) async {
+                  if (resultData != null) {
                     AuthData authData = AuthData.fromJson(resultData);
-                    User user = authData.login.user;
-                    print(user.username + " " +user.phone);
-                    if (resultData != null) {
-                      SharedPreferences sharedPreferences =
-                          await SharedPreferences.getInstance();
-                      sharedPreferences.setString(
-                          "token", authData.login.token);
-                      print(sharedPreferences.getString('token'));
-                    }
-                    Navigator.popAndPushNamed(context, LoginSuccessScreen.routeName);
-                  },
-                  onError: (OperationException exception) {
-                    print(exception.graphqlErrors);
-                    Navigator.popAndPushNamed(context, LoginFailedScreen.routeName);
-                  }),
+                    // User user = authData.login.user;
+                    // print(user.phone + " " + user.id.toString());
+                    SharedPreferences sharedPreferences =
+                        await SharedPreferences.getInstance();
+                    sharedPreferences.setString(
+                        "token",  "Bearer " + authData.login.token);
+                    print(sharedPreferences.getString('token'));
+                    Navigator.popAndPushNamed(
+                      context, LoginSuccessScreen.routeName);
+                  } 
+                },
+                onError: (OperationException exception) {
+                  addError(error: exception.graphqlErrors.toString());
+                  Navigator.popAndPushNamed(
+                    context,
+                    LoginFailedScreen.routeName,
+                    arguments: exception.graphqlErrors,
+                  );
+                }),
               builder: (
                 RunMutation runMutation,
                 QueryResult result,
@@ -109,7 +104,7 @@ class _SignFormState extends State<SignForm> {
                       //////////////////////////// Todo
                       _formKey.currentState.save();
                       runMutation({
-                        "username": userName,
+                        "phone": phone,
                         "password": password,
                       });
                     }
@@ -152,29 +147,16 @@ class _SignFormState extends State<SignForm> {
     );
   }
 
-  TextFormField buildUserNameFormField() {
+  TextFormField buildPhoneFormField() {
     return TextFormField(
-      keyboardType: TextInputType.text,
-      onSaved: (newValue) => userName = newValue,
+      keyboardType: TextInputType.phone,
+      onSaved: (newValue) => phone = newValue,
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kEmailNullError);
         }
-        // else if (emailValidatorRegExp.hasMatch(value)) {
-        //   removeError(error: kInvalidEmailError);
-        // }
         return null;
       },
-      // validator: (value) {
-      //   if (value.isEmpty) {
-      //     addError(error: kEmailNullError);
-      //     return "";
-      //   } else if (!emailValidatorRegExp.hasMatch(value)) {
-      //     addError(error: kInvalidEmailError);
-      //     return "";
-      //   }
-      //   return null;
-      // },
       validator: (value) {
         if (value.isEmpty) {
           addError(error: kEmailNullError);
@@ -183,11 +165,13 @@ class _SignFormState extends State<SignForm> {
         return null;
       },
       decoration: InputDecoration(
-        labelText: "User name",
-        hintText: "Enter your user name",
+        labelText: "phone",
+        hintText: "Enter your phone number",
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: CustomSuffixIcon(svgIcon: "assets/icons/Mail.svg"),
+        suffixIcon: Icon(Icons.phone_android),
       ),
     );
   }
 }
+
+

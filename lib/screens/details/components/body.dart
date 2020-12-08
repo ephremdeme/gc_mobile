@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_interaction/components/default_button.dart';
+import 'package:flutter_native_interaction/graphQLConf.dart';
 import 'package:flutter_native_interaction/graphql/querys/products.dart';
+import 'package:flutter_native_interaction/providers/cart.dart';
 import 'package:flutter_native_interaction/screens/see_more/see_more.dart';
 import 'package:flutter_native_interaction/size_config.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:provider/provider.dart';
 
 import 'product_description.dart';
 import 'top_rounded_container.dart';
@@ -27,6 +30,7 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
+    final cart = Provider.of<Cart>(context, listen: false);
     return Padding(
       padding: EdgeInsets.all(getProportionateScreenWidth(5)),
       child: Query(
@@ -40,13 +44,15 @@ class _BodyState extends State<Body> {
               return Text(result.exception.toString());
             }
             if (result.loading) {
-              return Text('Loading');
+              return Center(
+                child: CircularProgressIndicator(),
+              );
             }
 
             dynamic product = result.data["product"];
             List<dynamic> images = result.data["product"]["images"];
 
-            print(product["id"]);
+            // print(product["id"]);
 
             return Column(
               children: [
@@ -59,11 +65,12 @@ class _BodyState extends State<Body> {
                   child: Column(
                     children: [
                       ProductDescription(
-                        description: result.data["product"]["description"],
+                        description: result.data["product"]["shortDescription"],
                         pressOnSeeMore: () {
                           List list = new List();
                           list.add(widget.id);
                           list.add(images);
+                          list.add(result.data["product"]["fullDescription"]);
                           Navigator.pushNamed(context, SeeMore.routeName,
                               arguments: list);
                         },
@@ -72,7 +79,13 @@ class _BodyState extends State<Body> {
                       DefaultButton(
                         text: 'View in AR',
                         press: () {
-                          _openAr();
+                          _openAr(
+                            serverLink +
+                                    "products/" +
+                                    result.data["product"]["id"].toString() +
+                                    "/models/" + result.data["product"]["model"]
+                            // "192.168.137.1/chair.glb"
+                            );
                         },
                       ),
                       TopRoundedContainer(
@@ -86,7 +99,19 @@ class _BodyState extends State<Body> {
                           ),
                           child: DefaultButton(
                             text: "Add To Cart",
-                            press: () {},
+                            press: () {
+                              cart.addItem(
+                                result.data["product"]["id"],
+                                result.data["product"]["price"].toDouble(),
+                                result.data["product"]["name"],
+                                serverLink +
+                                    "products/" +
+                                    result.data["product"]["id"].toString() +
+                                    "/images/" +
+                                    result.data["product"]["images"][0]
+                                        ["filename"],
+                              );
+                            },
                           ),
                         ),
                       ),
@@ -99,13 +124,30 @@ class _BodyState extends State<Body> {
     );
   }
 
-  Future<String> _openAr() async {
+  Future<String> _openAr(String modelUrl) async {
+    var sendMap = <String, dynamic> {
+      'modelUrl': modelUrl
+    };
     String value;
     try {
-      value = await platform.invokeMethod('getMessage');
+      value = await platform.invokeMethod('getMessage', sendMap);
     } catch (err) {
       print(err);
     }
     return value;
   }
+
+  // Future<String> _getMessage() async {
+//   var sendMap = <String, dynamic> {
+//     'from': 'Ermiyas'
+//   };
+//
+//   String value;
+//   try{
+//     value = await platform.invokeMethod('getMessage', sendMap);
+//   } catch(err) {
+//     print(err);
+//   }
+//   return value;
+// }
 }

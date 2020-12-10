@@ -37,7 +37,7 @@ class _BodyState extends State<Body> {
           options: QueryOptions(
               documentNode: gql(singleProduct),
               variables: {'id': widget.id},
-              pollInterval: 1000),
+              pollInterval: 1),
           builder: (QueryResult result,
               {VoidCallback refetch, FetchMore fetchMore}) {
             if (result.hasException) {
@@ -114,6 +114,7 @@ class _BodyState extends State<Body> {
                             },
                           ),
                         ),
+                      
                       ),
                     ],
                   ),

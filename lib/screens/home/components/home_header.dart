@@ -20,18 +20,28 @@ class HomeHeader extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SearchField(),
+          Text(
+            "Shop In AR",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold
+            ),
+          ),
+          Spacer(),
           Consumer<Cart>(builder: (_, cart, wt) => IconBtnWithCounter (
               svgSrc: "assets/icons/Cart Icon.svg",
               numOfitem: cart.itemCount,
               press: () => Navigator.pushNamed(context, CartScreen.routeName),
             ),
           ),
-          IconBtnWithCounter(
-            svgSrc: "assets/icons/Bell.svg",
-            numOfitem: 3,
-            press: () {},
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.all(2.0),
+          //   child: IconBtnWithCounter(
+          //     svgSrc: "assets/icons/Bell.svg",
+          //     numOfitem: 3,
+          //     press: () {},
+          //   ),
+          // ),
         ],
       ),
     );

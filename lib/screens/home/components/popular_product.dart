@@ -4,13 +4,11 @@ import 'package:flutter_native_interaction/providers/cart.dart';
 import 'package:flutter_native_interaction/screens/details/details_screen.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
-// import 'package:flutter_native_interaction/models/Product.dart';
 // import 'package:flutter_native_interaction/components/product_card.dart';
 
 import '../../../constants.dart';
 import '../../../graphQLConf.dart';
 import '../../../size_config.dart';
-import 'section_title.dart';
 
 class PopularProducts extends StatelessWidget {
   @override
@@ -24,7 +22,7 @@ class PopularProducts extends StatelessWidget {
           variables: {
             'limit': 6,
           },
-          pollInterval: 10,
+          pollInterval: 2,
         ),
         builder: (QueryResult result,
                 {VoidCallback refetch, FetchMore fetchMore}) {
@@ -156,32 +154,3 @@ class PopularProducts extends StatelessWidget {
     );
   }
 }
-
-// Column(
-//         children: [
-//           Padding(
-//             padding:
-//                 EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
-//             child: SectionTitle(title: "Popular Products", press: () {}),
-//           ),
-//           SizedBox(height: getProportionateScreenWidth(20)),
-//           SingleChildScrollView(
-//             scrollDirection: Axis.horizontal,
-//             child: Row(
-//               children: [
-//                 // ...List.generate(
-//                 //   demoProducts.length,
-//                 //   (index) {
-//                 //     if (demoProducts[index].isPopular)
-//                 //      return ProductCard(product: demoProducts[index]);
-
-//                 //     return SizedBox
-//                 //         .shrink(); // here by default width and height is 0
-//                 //   },
-//                 // ),
-//                 SizedBox(width: getProportionateScreenWidth(20)),
-//               ],
-//             ),
-//           )
-//         ],
-//       ),

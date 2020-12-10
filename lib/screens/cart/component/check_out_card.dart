@@ -58,44 +58,42 @@ class CheckoutCard extends StatelessWidget {
                 SizedBox(
                   width: getProportionateScreenWidth(190),
                   child: //Mutation(
-                  //   options: MutationOptions(
-                  //     documentNode: gql(checkOut),
-                  //     update: (Cache cache, QueryResult result) {
-                  //       return cache;
-                  //     },
-                  //     onCompleted: (dynamic resultData) async {
-                  //       if (resultData != null) {
-                  //         Navigator.popAndPushNamed(
-                  //           context, HomeScreen.routeName);
-                  //       } 
-                  //     },
-                  //     onError: (OperationException exception) {
-                  //       Navigator.popAndPushNamed(
-                  //         context,
-                  //         LoginFailedScreen.routeName,
-                  //         arguments: exception.graphqlErrors,
-                  //       );
-                  //     }),
-                  //   builder: (
-                  //     RunMutation runMutation,
-                  //     QueryResult result,
-                  //   ) {
-                  //     return DefaultButton(
-                  //       text: "Check Out",
-                  //       press: () async {
-                  //           Map<String, Map<>>
-                  //           runMutation({
-                  //             "orders": order,
-                  //           });
-                  //         }
-                  //     );
-                  //   }),
-                  // ), 
-                  DefaultButton(
+                      //   options: MutationOptions(
+                      //     documentNode: gql(checkOut),
+                      //     update: (Cache cache, QueryResult result) {
+                      //       return cache;
+                      //     },
+                      //     onCompleted: (dynamic resultData) async {
+                      //       if (resultData != null) {
+                      //         Navigator.popAndPushNamed(
+                      //           context, HomeScreen.routeName);
+                      //       }
+                      //     },
+                      //     onError: (OperationException exception) {
+                      //       Navigator.popAndPushNamed(
+                      //         context,
+                      //         LoginFailedScreen.routeName,
+                      //         arguments: exception.graphqlErrors,
+                      //       );
+                      //     }),
+                      //   builder: (
+                      //     RunMutation runMutation,
+                      //     QueryResult result,
+                      //   ) {
+                      //     return DefaultButton(
+                      //       text: "Check Out",
+                      //       press: () async {
+                      //           Order
+                      //           runMutation({
+                      //             "orders": order,
+                      //           });
+                      //         }
+                      //     );
+                      //   }),
+                      // ),
+                      DefaultButton(
                     text: "Check Out",
-                    press: () async {
-
-                    },
+                    press: () async {},
                   ),
                 ),
               ],

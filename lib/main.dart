@@ -10,7 +10,7 @@ import 'package:flutter_native_interaction/screens/home/home_screen.dart';
 // import 'package:flutter_native_interaction/screens/complete_profile/complete_profile_screen.dart';
 // import 'package:flutter_native_interaction/screens/complete_profile/components/complete_profile_form.dart';
 import 'package:flutter_native_interaction/screens/onboarding_screen/onboarding_screen.dart';
-import 'package:flutter_native_interaction/screens/sign_up/sign_up_screen.dart';
+// import 'package:flutter_native_interaction/screens/sign_up/sign_up_screen.dart';
 import 'package:provider/provider.dart';
 // import 'package:flutter_native_interaction/screens/home/home_screen.dart';
 import 'package:flutter_native_interaction/theme.dart';

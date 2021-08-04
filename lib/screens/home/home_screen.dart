@@ -19,11 +19,11 @@ class _HomeScreenState extends State<HomeScreen> {
             title: new Text('Are you sure?'),
             content: new Text('Do you want to exit the App'),
             actions: <Widget>[
-              new FlatButton(
+              new TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
                 child: new Text('No'),
               ),
-              new FlatButton(
+              new TextButton(
                 onPressed: () => Navigator.of(context).pop(true),
                 child: new Text('Yes'),
               ),

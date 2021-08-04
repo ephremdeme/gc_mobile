@@ -38,7 +38,7 @@ class Cart with ChangeNotifier {
 
   void addItem(int productId, double price, String name, String image) {
     if (_items.containsKey(productId)) {
-      //
+      
       _items.update(
           productId,
           (existingCartItem) => CartItem(
@@ -57,7 +57,6 @@ class Cart with ChangeNotifier {
   }
 
   void removeItem(int productId) {
-    print(productId);
     _items.remove(productId);
     notifyListeners();
   }
